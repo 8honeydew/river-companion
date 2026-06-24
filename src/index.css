@@ -1,0 +1,40 @@
+body {
+  margin: 0;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+}
+
+.river {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+
+  font-size: 80px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.river:hover {
+  transform: scale(1.1);
+}
+
+.message-bubble {
+  position: fixed;
+
+  bottom: 130px;
+  right: 20px;
+
+  background: white;
+
+  padding: 12px;
+  border-radius: 12px;
+
+  border: 2px solid black;
+
+  max-width: 220px;
+
+  font-family: sans-serif;
+}
