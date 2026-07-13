@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Pet from './components/Pet';
+import Notebook from './components/Notebook';
+import moods from  './data/moods';
 
 function App() {
   const [messages, setMessages] = useState([
@@ -7,18 +10,7 @@ function App() {
   ]);
   const [pet, setPet] = useState("🐱");
   const [isOpen, setIsOpen] = useState(false);
-
-  const moods = [
-      {pet: "😸", message: "I'm happy today!"},
-      {pet: "😴", message: "Just woke up..."},
-      {pet: "🐱", message: "What are you working on?"},
-      {pet: "😹", message: "Hehe!"},
-      {pet: "😼", message: "I knocked something off a table."},
-      {pet: "😻", message: "You're doing so amazing."},
-      {pet: "😿", message: "Pay attention to me..."},
-      {pet: "😋", message: "Treats?"},
-      {pet: "🤓", message: "Let's do some work!"}
-    ];
+  const [newMessage, setNewMessage] = useState("");
 
   function handleClick() {
     const randomMood = 
@@ -33,33 +25,30 @@ function App() {
     setIsOpen(!isOpen);
   }
 
+  function sendMessage() {
+    if (newMessage.trim() === "") {
+      return;
+    }
+
+    setMessages((prev) => [newMessage, ...prev]);
+    setNewMessage("");
+  }
+
   return (
     <div>
-      <div
-        className="river"
+      <Pet
+        pet={pet}
         onClick={togglePanel}
-      >
-        {pet}
-      </div>
+      />
 
-      {isOpen && (
-        <div className="notebook">
-          <h3>River's Notebook</h3>
-
-          <div className="section">
-            <h4>Messages</h4>
-
-            <ul>
-              {messages.map((msg, index) => (
-                <li key={index}>{msg}</li>
-              ))}
-            </ul>
-            
-          </div>
-
-          <button onClick={togglePanel}>Close</button>
-        </div>
-      )}
+      <Notebook
+        isOpen={isOpen}
+        messages={messages}
+        newMessage={newMessage}
+        setNewMessage={setNewMessage}
+        sendMessage={sendMessage}
+        togglePanel={togglePanel}
+      />
     </div>
   );
 }
