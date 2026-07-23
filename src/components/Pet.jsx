@@ -1,7 +1,7 @@
-function Pet({ pet, onClick }) {
+function Pet({ pet, animation, onClick }) {
     return (
         <div 
-        className="river"
+        className={`river ${animation}`}
         onClick={onClick}
         >
             {pet}

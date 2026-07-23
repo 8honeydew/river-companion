@@ -23,18 +23,42 @@ body {
 
 .message-bubble {
   position: fixed;
-
   bottom: 130px;
   right: 20px;
 
   background: white;
-
-  padding: 12px;
+  border: 2px solid black;
   border-radius: 12px;
 
-  border: 2px solid black;
+  padding: 12px;
 
   max-width: 220px;
 
   font-family: sans-serif;
+}
+
+.bounce {
+  animation: bounce 0.3s;
+}
+
+@keyframes bounce {
+  0% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(-25px);
+  }
+
+  60% {
+    transform: translateY(0);
+  }
+
+  80% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }

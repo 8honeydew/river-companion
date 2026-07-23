@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Pet from './components/Pet';
 import Notebook from './components/Notebook';
+import SpeechBubble from './components/SpeechBubble';
 import moods from  './data/moods';
+
 
 function App() {
   const [messages, setMessages] = useState([
@@ -9,8 +11,28 @@ function App() {
     "I'm happy to see you."
   ]);
   const [pet, setPet] = useState("🐱");
+  const [speech, setSpeech] = useState("");
+  const [showSpeech, setShowSpeech] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [animationClass, setAnimationClass] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomMood = 
+        moods[Math.floor(Math.random() * moods.length)];
+      
+      setPet(randomMood.pet);
+      setSpeech(randomMood.message);
+      setShowSpeech(true);
+
+      setTimeout(() => {
+        setShowSpeech(false);
+      }, 3000);
+    }, 25000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   function handleClick() {
     const randomMood = 
@@ -18,7 +40,21 @@ function App() {
     
     setPet(randomMood.pet);
 
-    setMessages((prev) => [randomMood.message, ...prev]);
+    setSpeech(randomMood.message);
+
+    setShowSpeech(true);
+
+    setAnimationClass("bounce");
+
+    togglePanel();  
+
+    setTimeout(() => {
+      setShowSpeech(false);
+    }, 3000);
+
+    setTimeout( () => {
+      setAnimationClass("");
+    }, 300); 
   }
 
   function togglePanel() {
@@ -36,9 +72,16 @@ function App() {
 
   return (
     <div>
+
+      <SpeechBubble 
+        speech={speech} 
+        showSpeech={showSpeech}
+      />
+
       <Pet
         pet={pet}
-        onClick={togglePanel}
+        animation={animationClass}
+        onClick={handleClick}
       />
 
       <Notebook
@@ -49,6 +92,7 @@ function App() {
         sendMessage={sendMessage}
         togglePanel={togglePanel}
       />
+      
     </div>
   );
 }
