@@ -6,10 +6,30 @@ import moods from  './data/moods';
 
 
 function App() {
-  const [messages, setMessages] = useState([
-    "Hi! I'm River.",
-    "I'm happy to see you."
-  ]);
+  const [messages, setMessages] = useState(() => {
+    const savedMessages = localStorage.getItem("riverMessages");
+    
+    if (savedMessages) {
+      return JSON.parse(savedMessages);
+    }
+    
+    return [
+      {
+        id: 1,
+        sender: "River",
+        text: "Hi! I'm River.",
+        unread: false,
+        time: "Today"
+      },
+      {
+        id: 2,
+        sender: "River",
+        text: "Hi! I'm happy to see you.",
+        unread: false,
+        time: "Today"
+      }
+    ];
+  });
   const [pet, setPet] = useState("🐱");
   const [speech, setSpeech] = useState("");
   const [showSpeech, setShowSpeech] = useState(false);
@@ -33,6 +53,13 @@ function App() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "riverMessages",
+      JSON.stringify(messages)
+    );
+  }, [messages]);
 
   function handleClick() {
     const randomMood = 
@@ -66,8 +93,28 @@ function App() {
       return;
     }
 
-    setMessages((prev) => [newMessage, ...prev]);
+    setMessages((prev) => [
+      {
+        id: Date.now(),
+        sender: "You",
+        text: newMessage, 
+        unread: true,
+        time: "Just now"
+      },
+      ...prev
+    ]);
+    
     setNewMessage("");
+  }
+
+  function markAsRead(id) {
+  setMessages((prev) =>
+    prev.map((msg) =>
+      msg.id === id
+        ? {...msg, unread: false }
+        : msg
+      )
+    );
   }
 
   return (
@@ -91,10 +138,12 @@ function App() {
         setNewMessage={setNewMessage}
         sendMessage={sendMessage}
         togglePanel={togglePanel}
+        markAsRead={markAsRead}
       />
       
     </div>
   );
 }
+
 
 export default App;

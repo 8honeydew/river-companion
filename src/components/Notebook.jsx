@@ -5,6 +5,7 @@ function Notebook({
     setNewMessage,
     sendMessage,
     togglePanel,
+    markAsRead,
 }) {
     if (!isOpen) {
         return null;
@@ -18,8 +19,14 @@ function Notebook({
             <h4>Messages</h4>
 
             <ul>
-              {messages.map((msg, index) => (
-                <li key={index}>{msg}</li>
+              {messages.map((msg) => (
+                <li 
+                  key={msg.id}
+                  onClick={() => markAsRead(msg.id)}
+                >
+                  {msg.unread && "🔵 "}
+                  <strong>{msg.sender}:</strong> {msg.text}
+                </li>
               ))}
             </ul> 
           </div>
